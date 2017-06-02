@@ -6,7 +6,8 @@ using System;
 public class AdManager : MonoBehaviour
 {
     public static AdManager instance;
-    public string adUnitId;
+    public string adInterstitialUnitId;
+    public string adBannerUnitId;
 
     public InterstitialAd interstitial;
     public BannerView bannerView;
@@ -22,13 +23,13 @@ public class AdManager : MonoBehaviour
     public void RequestInterstitial()
     {
         #if UNITY_ANDROID
-                string adUnitId = "INSERT_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
+                adInterstitialUnitId = "INSERT_ANDROID_INTERSTITIAL_AD_UNIT_ID_HERE";
         #elif UNITY_IPHONE
-                string adUnitId = "INSERT_IOS_INTERSTITIAL_AD_UNIT_ID_HERE";
+                adInterstitialUnitId = "INSERT_IOS_INTERSTITIAL_AD_UNIT_ID_HERE";
         #endif
 
         // Initialize an InterstitialAd.
-        interstitial = new InterstitialAd(adUnitId);
+        interstitial = new InterstitialAd(adInterstitialUnitId);
 
         // Called when an ad request has successfully loaded.
         interstitial.OnAdLoaded += InterstitialHandleOnAdLoaded;
@@ -57,6 +58,7 @@ public class AdManager : MonoBehaviour
         {
             if (interstitial.IsLoaded())
             {
+                Debug.Log("Interstitial showed");
 				interstitial.Show();
             }
         }
@@ -96,13 +98,13 @@ public class AdManager : MonoBehaviour
     public void RequestBanner()
     {
         #if UNITY_ANDROID
-                string adUnitId = "INSERT_ANDROID_BANNER_AD_UNIT_ID_HERE";
+                adBannerUnitId = "INSERT_ANDROID_BANNER_AD_UNIT_ID_HERE";
         #elif UNITY_IPHONE
-                string adUnitId = "INSERT_IOS_BANNER_AD_UNIT_ID_HERE";
+                adBannerUnitId = "INSERT_IOS_BANNER_AD_UNIT_ID_HERE";
         #endif
-        
+
         // Create a 320x50 banner at the top of the screen.
-        bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Top);
+        bannerView = new BannerView(adBannerUnitId, AdSize.Banner, AdPosition.Top);
 
         // Called when an ad request has successfully loaded.
         bannerView.OnAdLoaded += HandleOnAdLoaded;
@@ -162,11 +164,13 @@ public class AdManager : MonoBehaviour
 
     public void ShowBanner()
     {
+        Debug.Log("Banner showed");
         bannerView.Show();
     }
     
     public void HideBanner()
     {
+        Debug.Log("Banner hide");
         bannerView.Hide();
     }
 }
